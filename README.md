@@ -26,15 +26,19 @@ Vue 实例有一个完整的生命周期，也就是从开始创建、初始化�
 
 ### d. 父子组件执行顺序
 - 加载渲染过程
+
 父 beforeCreate -> 父 created -> 父 beforeMount -> 子 beforeCreate -> 子 created -> 子 beforeMount -> 子 mounted -> 父 mounted
 
 - 子组件更新过程
+
 父 beforeUpdate -> 子 beforeUpdate -> 子 updated -> 父 updated
 
 - 父组件更新过程
+
 父 beforeUpdate -> 父 updated
 
 - 销毁过程
+
 父 beforeDestroy -> 子 beforeDestroy -> 子 destroyed -> 父 destroyed
 
 ## 2. watch
@@ -230,7 +234,6 @@ this.$emit('update:title', newTitle)
 <slot></slot>
 
 // 默认是 v-slot:default，可以不写
-
 /* 上面为
   // 父组件
   <template v-slot:default>
@@ -241,6 +244,7 @@ this.$emit('update:title', newTitle)
 */
 ```
 > 注意 v-slot 只能添加在一个 <template> 上， 若为多个则需要具名插槽
+
 
 2. 具名插槽
 
