@@ -176,7 +176,7 @@ console.log(this.demo) // demo
 ```
 
 ### 6. 插槽
-1. 匿名插槽
+#### 1. 匿名插槽
 ```js
 // 父组件
 <parent>
@@ -199,7 +199,7 @@ console.log(this.demo) // demo
 ```
 **注意**：`v-slot`只能添加在一个 <template> 上， 若为多个则需要具名插槽
 
-2. 具名插槽
+#### 2. 具名插槽
 
 顾名思义：插槽组件slot标签带name命名
 ```js
@@ -215,7 +215,7 @@ console.log(this.demo) // demo
 ```
 > 若想判断存在显示对应的插槽可以通过 v-if="$slots.name"；例如： v-if="$slots.default" v-if="$slots.header"
 
-3. 作用域插槽
+#### 3. 作用域插槽
 
 父组件可以访问子组件数据
 
@@ -248,7 +248,7 @@ Vue.component('my-component', {
 指定已创建的实例之父实例，在两者之间建立父子关系。
 子实例可以用 this.$parent 访问父实例，子实例被推入父实例的 $children 数组中。
 
-1. $children
+#### $children
 
 - 类型：Array
 - 详细：`$children` **并不能保证顺序, 也不是响应式的**
@@ -358,7 +358,7 @@ new Vue({
 // main.js
 Vue.prototype.$log = window.console.log
 
-// 组件内部
+// 页面
 <div>{{$log(info)}}</div>
 ```
 
