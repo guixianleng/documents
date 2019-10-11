@@ -475,7 +475,7 @@ module.exports = {
 ```
 
 ### 9.  require.context() 自动化全局注册
-
+webpack官方说明：[require.context()](https://webpack.docschina.org/guides/dependency-management/#require-context)
 ```js
 const requireComponent = require.context(
   // 其组件目录的相对路径
