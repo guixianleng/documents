@@ -220,7 +220,6 @@ console.log(this.demo) // demo
 // 通过 $emit 触发 update方法更新 title
 this.$emit('update:title', newTitle)
 ```
-
 ### 7. 插槽
 1. 匿名插槽
 ```js
@@ -243,8 +242,7 @@ this.$emit('update:title', newTitle)
   <slot name="default"></slot>
 */
 ```
-> 注意 v-slot 只能添加在一个 <template> 上， 若为多个则需要具名插槽
-
+注意 v-slot 只能添加在一个 <template> 上， 若为多个则需要具名插槽
 
 2. 具名插槽
 
@@ -260,8 +258,7 @@ this.$emit('update:title', newTitle)
 // 子组件
 <slot name="header"></slot>
 ```
-> 若想判断存在显示对应的插槽可以通过 v-if="$slots.name"；
->例如： v-if="$slots.default" v-if="$slots.header"
+> 若想判断存在显示对应的插槽可以通过 v-if="$slots.name"；例如： v-if="$slots.default" v-if="$slots.header"
 
 3. 作用域插槽
 父组件可以访问子组件数据
