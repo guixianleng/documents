@@ -109,7 +109,7 @@ Vue.component('my-component', {
 vuex是一个状态管理器，提供数据共享
 
 ### 4. attrs、inheritAttrs和listeners
-1. $attrs
+#### 1. $attrs
 
 场景：需要获取父组件多个值时，定义props比较繁琐，这时就可以使用attrs替代
 
@@ -124,7 +124,7 @@ mounted () {
 ```
 **注意**：如果`props`定义了，`$attrs`中是获取不到的
 
-2. 禁用特性继承`inheritAttrs`
+#### 2. 禁用特性继承`inheritAttrs`
 
 如果不希望组件的根元素继承特性，你可以在组件的选项中设置inheritAttrs: false
 
@@ -136,7 +136,7 @@ Vue.component('my-component', {
 ```
 **注意**：inheritAttrs: false 选项不会影响 style 和 class 的绑定。
 
-3. $listeners
+#### 3. $listeners
 
 场景：子组件需要调用父组件中方法
 ```js
@@ -294,8 +294,8 @@ vm.$watch(
   function (newVal, oldVal) {
     console.log(val, oldVal)
   },
-  // 深度 watcher
   {
+    // 深度 watcher
     deep: true,
     // 该回调将会在侦听开始之后被立即调用
     immediate: true
@@ -305,7 +305,9 @@ vm.$watch(
 
 ## 3. 不常用但实用的开发小技巧
 ### 1. v-cloak
-场景：网络加载慢，是出现`{{}}`插值来不及渲染的情况，可以使用`v-cloak`解决
+场景：网络加载慢，是出现`{{}}`插值来不及渲染的情况，
+
+解决方式：使用`v-cloak`指令
 ```html
 <div v-cloak>
   {{ message }}
@@ -319,7 +321,8 @@ vm.$watch(
 ```
 ### 2. $forceUpdate
 场景：render函数没有自动更新，
-解决：强制刷新，解决页面不会重新渲染的问题，`this.$forceUpdate()`
+
+解决方式：强制刷新，解决页面不会重新渲染的问题，`this.$forceUpdate()`
 
 ### 3. Object.freeze
 `Object.freeze()`是ES5新增的特性，可以冻结一个对象，防止对象被修改。
@@ -359,10 +362,10 @@ Vue.prototype.$log = window.console.log
 <div>{{$log(info)}}</div>
 ```
 
-### 5. transformToRequire
+### 5. transformToRequire 再也不用把图片写成变量了
 场景：vue-cli3脚手架引入图片，需提前 require 传给一个变量再传给组件
 
-解决：`transformToRequire` **再也不用把图片写成变量了**
+解决方式：配置 `transformToRequire` 获取require地址
 ```js
 // 配置之前
 <template>
@@ -399,7 +402,7 @@ vue.config.js中配置
 ### 6. img 图片加载失败
 场景：移动端会出现很多图片的加载，某些图片加载不出来
 
-解决：引入默认的图片替换
+解决方式：使用默认的图片替换加载失败的图片
 1. vue-lazyload 图片懒加载插件
 
 ```shell
