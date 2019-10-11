@@ -161,9 +161,7 @@ Vue.component('my-component', {
   // ...
 })
 ```
-::: tips
-  注意 inheritAttrs: false 选项不会影响 style 和 class 的绑定。
-:::
+*注意* inheritAttrs: false 选项不会影响 style 和 class 的绑定。
 
 3. $listeners
 
@@ -242,7 +240,7 @@ this.$emit('update:title', newTitle)
   <slot name="default"></slot>
 */
 ```
-注意 v-slot 只能添加在一个 <template> 上， 若为多个则需要具名插槽
+*注意*：v-slot 只能添加在一个 <template> 上， 若为多个则需要具名插槽
 
 2. 具名插槽
 
