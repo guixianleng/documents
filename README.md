@@ -1,15 +1,15 @@
 # Vue 开发必备技能
 ## 前言
-自17年使用Vue以来，总结下自己开发过程中掌握的技能，务实下自己的vue基础的，方便后续翻阅和掌握的技术拾取。
+自使用Vue以来，总结下自己开发过程中掌握的技能，务实下自己的vue基础的同事，方便后续翻阅和技术总结
 
 ## 1. Vue生命周期
-### a. 生命周期是什么
+### 1. 生命周期是什么
 Vue 实例有一个完整的生命周期，也就是从开始创建、初始化数据、编译模板、挂载Dom→渲染、更新→渲染、卸载等一系列过程，这就是 `Vue生命周期`
 
-### b. 生命周期图示
+### 2. 生命周期图示
 ![](./images/period.png)
 
-### c.各生命周期及其作用
+### 3.各生命周期及其作用
 
 |  生命周期钩子   | 作用  |
 |  :----:  | :-----  |
@@ -24,7 +24,7 @@ Vue 实例有一个完整的生命周期，也就是从开始创建、初始化�
 | beforeDestroy  | 组件销毁前调用 |
 | destroyed   | 组件销毁后调用 |
 
-### d. 父子组件执行顺序
+### 4. 父子组件执行顺序
 - 加载渲染过程
 
 父 beforeCreate -> 父 created -> 父 beforeMount -> 子 beforeCreate -> 子 created -> 子 beforeMount -> 子 mounted -> 父 mounted
@@ -50,7 +50,7 @@ Vue.component('my-component', {
 }
 ```
 
-2. 标准形式
+2. 规范式
 ```js
 /**
   * @type 传入值类型检查
@@ -91,6 +91,7 @@ Vue.component('my-component', {
 ```
 
 ### 2. $emit
+自定义事件
 ```js
 // 子组件
 Vue.component('my-component', {
@@ -164,7 +165,6 @@ Vue.component('receiver', {
 ```
 ### 5. attrs、inheritAttrs和listeners
 ### 1. $attrs
-
 场景：需要获取父组件多个值时，定义props比较繁琐，这时就可以使用attrs替代
 
 ```js
@@ -179,7 +179,6 @@ mounted () {
 **注意**：如果`props`定义了，`$attrs`中是获取不到的
 
 ### 2. 禁用特性继承`inheritAttrs`
-
 如果不希望组件的根元素继承特性，你可以在组件的选项中设置inheritAttrs: false
 
 ```js
@@ -191,7 +190,6 @@ Vue.component('my-component', {
 **注意**：inheritAttrs: false 选项不会影响 style 和 class 的绑定。
 
 ### 3. $listeners
-
 场景：子组件需要调用父组件中方法
 ```js
 // 父组件
@@ -205,11 +203,13 @@ mounted () {
 
 
 ### 6. provide和inject（多层传递值）
+[`provide / inject`](https://cn.vuejs.org/v2/api/#provide-inject)
+
 > 2.2.0 新增
 
 > `provide` 和 `inject` 主要为高阶插件/组件库提供用例。并不推荐直接用于应用程序代码
 
-[`provide / inject`](https://cn.vuejs.org/v2/api/#provide-inject)：简单的说就是在父组件中通过provider来提供变量，然后在子组件中通过inject来注入变量中。
+简单的说就是在父组件中通过provider来提供变量，然后在子组件中通过inject来注入变量中。
 
 - provide：Object | () => Object
 - inject：Array<string> | { [key: string]: string | Symbol | Object }
@@ -301,7 +301,6 @@ Vue.component('my-component', {
 子实例可以用 this.$parent 访问父实例，子实例被推入父实例的 $children 数组中。
 
 ### $children
-
 - 类型：Array
 - 详细：`$children` **并不能保证顺序, 也不是响应式的**
 
@@ -330,7 +329,7 @@ this.$emit('update:title', newTitle)
 ```
 ## 3. 不常用但实用的开发小技巧
 ### 1. watch
-[vm.$watch( expOrFn, callback, [options] )](https://cn.vuejs.org/v2/api/#vm-watch) 详细说明
+[vm.$watch( expOrFn, callback, [options] )](https://cn.vuejs.org/v2/api/#vm-watch)
 
 ### options：deep（深度监听） 和 immediate（立即执行）
 
@@ -368,7 +367,7 @@ vm.$watch(
 css设置
 ```css
 [v-cloak] {
-    display: none;
+  display: none;
 }
 ```
 ### 3. $forceUpdate
@@ -377,7 +376,9 @@ css设置
 解决方式：强制刷新，解决页面不会重新渲染的问题，`this.$forceUpdate()`
 
 ### 4. Object.freeze
-`Object.freeze()`是ES5新增的特性，可以冻结一个对象，防止对象被修改。
+[Object.freeze()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
+
+该方法是ES5新增的特性，可以冻结一个对象，防止对象被修改。
 ```js
 new Vue({
   data: {
@@ -527,7 +528,7 @@ module.exports = {
 ```
 
 ### 10.  require.context() 自动化全局注册
-webpack官方说明：[require.context()](https://webpack.docschina.org/guides/dependency-management/#require-context)
+[require.context()](https://webpack.docschina.org/guides/dependency-management/#require-context) 和 [Vue组件自动化全局注册](https://cn.vuejs.org/v2/guide/components-registration.html#%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E5%85%A8%E5%B1%80%E6%B3%A8%E5%86%8C)
 ```js
 const requireComponent = require.context(
   // 其组件目录的相对路径
@@ -563,7 +564,7 @@ requireComponent.keys().forEach(fileName => {
   )
 })
 ```
-如下我的路由[自动化全局注册](https://cn.vuejs.org/v2/guide/components-registration.html#%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E5%85%A8%E5%B1%80%E6%B3%A8%E5%86%8C)示例
+如下我的路由自动化全局注册示例：
 ```js
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -599,7 +600,6 @@ export default new Router({
 
 #### 解决方式
 1. `>>>`
-
 ```js
 <div class="demo">
   <el-input v-model="text"></el-input>
@@ -614,7 +614,6 @@ export default new Router({
 ```
 
 2. `/deep/`
-
 ```js
 <div class="demo">
   <el-input v-model="text"></el-input>
@@ -642,9 +641,10 @@ new Vue({
 })
 ```
 ### 11. Vue.observable 简单状态管理
+[Vue.observable](https://cn.vuejs.org/v2/api/#Vue-observable)
 > 2.6.0 新增
 
-[Vue.observable](https://cn.vuejs.org/v2/api/#Vue-observable): 让一个对象可响应，返回的对象可以直接用于`渲染函数`和`计算属性`内，并且会在发生改变时`触发相应的更新`
+让一个对象可响应，返回的对象可以直接用于`渲染函数`和`计算属性`内，并且会在发生改变时`触发相应的更新`
 
 ```js
 // store.js
@@ -679,7 +679,7 @@ Vue.component('', {
 })
 ```
 
-### 13. 异步组件处理
+### 13. 异步组件加载
 #### 常用两种
 ```js
 // 1. 
@@ -716,8 +716,9 @@ const AsyncComponent = () => ({
 ```
 
 ### 14. 函数式组件（functional）
-[functional](https://cn.vuejs.org/v2/api/#functional)
-定义：它`无状态` (没有响应式数据)，也`没有实例` (没有 this 上下文)
+[functional](https://cn.vuejs.org/v2/api/#functional) 和 [函数式组件](https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6) 
+>定义：它`无状态` (没有响应式数据)，也`没有实例` (没有 this 上下文)
+
 一个函数式组件就像这样：
 ```js
 Vue.component('my-component', {
@@ -739,7 +740,6 @@ Vue.component('my-component', {
   <!-- ... -->
 </template>
 ```
-[函数式组件](https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6) 详细介绍：
 
 下面以smart-list组件举例：
 ```js
@@ -814,4 +814,5 @@ var MyComponent = Vue.component('my-component')
 **v-show**：是基于css属性'display'简单切换
 
 #### 运用场景：
-`v-if` 适合于不需要频繁切换条件的场景；`v-show` 适合于频繁切换。
+- `v-if` 适合于不需要频繁切换条件的场景；
+- `v-show` 适合于频繁切换。
