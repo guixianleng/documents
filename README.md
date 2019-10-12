@@ -108,8 +108,62 @@ Vue.component('my-component', {
 ### 3. vuex
 vuex是一个状态管理器，提供数据共享
 
-### 4. attrs、inheritAttrs和listeners
-#### 1. $attrs
+### 4. EventBus
+背景：在vue1.x中，组件之间的通信主要通过`vm.$dispatch`沿着父链向上传播和`vm.$broadcast`向下广播来实现。然而在vue2.x中，已经废除了这种用法。vuex加入后，对组件之间的通信有了更加清晰的操作。
+对于`中大型项目`来说，一开始就把vuex的使用是明智的选择。而对于`小型项目`，`eventBus`就是便捷的解决方法了。
+
+实现原理：`$on` 和 `$emit` 实例化一个全局 vue 实现数据的共享
+```js
+// 在 main.js
+Vue.prototype.$eventBus = new Vue()
+
+// 传值
+methods: {
+  addEvent (ev) {
+    this.$eventBus.$emit('eventTarget', ev.target)
+  }
+}
+
+// 接收传值
+mounted () {
+  this.$eventBus.$on('eventTarget', target => {
+    console.log('eventTarget', target)
+  })
+}
+```
+或者新建一个 `eventBus.js` 文件
+```js
+// eventBus.js
+import Vue from 'vue'
+
+const eventBus = new Vue()
+
+export { eventBus }
+
+// 传值组件内
+import { eventBus } from '../eventBus'
+
+Vue.component('sender', {
+  template: `
+    <div v-on:click="addEvent"></div>
+  `,
+  methods: {
+    addEvent () {
+      this.$eventBus.$emit('eventTarget', 'send值')
+    }
+  }
+})
+// 接收组件内
+Vue.component('receiver', {
+  mounted () {
+    this.$eventBus.$on('eventTarget', target => {
+      console.log('eventTarget', target) // send值
+    })
+  }
+})
+```
+### 5. attrs、inheritAttrs和listeners
+### 1. $attrs
 
 场景：需要获取父组件多个值时，定义props比较繁琐，这时就可以使用attrs替代
 
@@ -124,7 +178,7 @@ mounted () {
 ```
 **注意**：如果`props`定义了，`$attrs`中是获取不到的
 
-#### 2. 禁用特性继承`inheritAttrs`
+### 2. 禁用特性继承`inheritAttrs`
 
 如果不希望组件的根元素继承特性，你可以在组件的选项中设置inheritAttrs: false
 
@@ -136,7 +190,7 @@ Vue.component('my-component', {
 ```
 **注意**：inheritAttrs: false 选项不会影响 style 和 class 的绑定。
 
-#### 3. $listeners
+### 3. $listeners
 
 场景：子组件需要调用父组件中方法
 ```js
@@ -150,7 +204,7 @@ mounted () {
 ```
 
 
-### 5. provide和inject（多层传递值）
+### 6. provide和inject（多层传递值）
 > 2.2.0 新增
 
 > `provide` 和 `inject` 主要为高阶插件/组件库提供用例。并不推荐直接用于应用程序代码
@@ -175,8 +229,8 @@ data () {
 console.log(this.demo) // demo
 ```
 
-### 6. 插槽
-#### 1. 匿名插槽
+### 7. 插槽
+### 1. 匿名插槽
 ```js
 // 父组件
 <parent>
@@ -184,6 +238,7 @@ console.log(this.demo) // demo
     <p>one slot.</p>
   </template>
 </parent>
+
 // 子组件
 <slot></slot>
 
@@ -198,9 +253,7 @@ console.log(this.demo) // demo
 */
 ```
 **注意**：`v-slot`只能添加在一个 <template> 上， 若为多个则需要具名插槽
-
-#### 2. 具名插槽
-
+### 2. 具名插槽
 顾名思义：插槽组件slot标签带name命名
 ```js
 // 父组件
@@ -215,8 +268,7 @@ console.log(this.demo) // demo
 ```
 > 若想判断存在显示对应的插槽可以通过 v-if="$slots.name"；例如： v-if="$slots.default" v-if="$slots.header"
 
-#### 3. 作用域插槽
-
+### 3. 作用域插槽
 父组件可以访问子组件数据
 
 ```js
@@ -244,11 +296,11 @@ Vue.component('my-component', {
 // slotProps 可以随便命名
 // slotProps 绑定的是子组件上的 user 对象
 ```
-### 7. parent和children
+### 8. parent和children
 指定已创建的实例之父实例，在两者之间建立父子关系。
 子实例可以用 this.$parent 访问父实例，子实例被推入父实例的 $children 数组中。
 
-#### $children
+### $children
 
 - 类型：Array
 - 详细：`$children` **并不能保证顺序, 也不是响应式的**
@@ -511,6 +563,33 @@ requireComponent.keys().forEach(fileName => {
   )
 })
 ```
+如下我的路由[自动化全局注册](https://cn.vuejs.org/v2/guide/components-registration.html#%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E5%85%A8%E5%B1%80%E6%B3%A8%E5%86%8C)示例
+```js
+import Vue from 'vue'
+import Router from 'vue-router'
+
+Vue.use(Router)
+
+let routes = [
+  {
+    path: '/',
+    redirect: '/recommend'
+  }
+]
+
+const routerContext = require.context('./modules', true, /\.js$/)
+routerContext.keys().forEach(route => {
+  const routerModule = routerContext(route)
+  routes = [...routes, ...(routerModule.default || routerModule)]
+})
+
+export default new Router({
+  mode: 'hash',
+  base: process.env.BASE_URL,
+  routes: routes
+})
+
+```
 ### 10. 深度作用选择器
 [Scoped Css](https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors)
 
@@ -548,3 +627,191 @@ requireComponent.keys().forEach(fileName => {
 ```css
 .demo[data-v-f3f3eg9] input { /* ... */ }
 ```
+
+### 11. Vue.compile 渲染函数
+在 render 函数中编译模板字符串。**只在独立构建时有效**
+```js
+var res = Vue.compile('<div><span>{{ msg }}</span></div>')
+
+new Vue({
+  data: {
+    msg: 'hello'
+  },
+  render: res.render,
+  staticRenderFns: res.staticRenderFns
+})
+```
+### 11. Vue.observable 简单状态管理
+> 2.6.0 新增
+
+[Vue.observable](https://cn.vuejs.org/v2/api/#Vue-observable): 让一个对象可响应，返回的对象可以直接用于`渲染函数`和`计算属性`内，并且会在发生改变时`触发相应的更新`
+
+```js
+// store.js
+import Vue from 'vue'
+
+export const store = Vue.observable({ count: 0 })
+export const mutations = {
+  setCount (count) {
+    store.count = count
+  }
+}
+
+//使用
+import { store, mutations } from '@/store'
+
+Vue.component('', {
+  template: `
+    <div>
+      <button @click="setCount(count + 1)">+</button>
+      <span>{{count}}</span>
+      <button @click="setCount(count - 1)">-</button>
+    </div>
+  `,
+  computed: {
+    count () {
+      return store.count
+    }
+  },
+  methods: {
+    setCount: mutations.setCount
+  }
+})
+```
+
+### 12. 异步组件处理
+#### 常用两种
+```js
+// 1. 
+Vue.component(
+  'async-webpack-example',
+  // 这个 `import` 函数会返回一个 `Promise` 对象。
+  () => import('./my-async-component')
+)
+// 2. 也是最常用的
+new Vue({
+  // ...
+  components: {
+    'my-component': () => import('./my-async-component')
+  }
+})
+```
+#### 处理加载状态
+> 2.3.0+ 新增
+
+```js
+const AsyncComponent = () => ({
+  // 需要加载的组件 (应该是一个 `Promise` 对象)
+  component: import('./MyComponent.vue'),
+  // 异步组件加载时使用的组件
+  loading: LoadingComponent,
+  // 加载失败时使用的组件
+  error: ErrorComponent,
+  // 展示加载时组件的延时时间。默认值是 200 (毫秒)
+  delay: 200,
+  // 如果提供了超时时间且组件加载也超时了，
+  // 则使用加载失败时使用的组件。默认值是：`Infinity`
+  timeout: 3000
+})
+```
+
+### 13. 函数式组件（functional）
+[functional](https://cn.vuejs.org/v2/api/#functional)
+定义：它`无状态` (没有响应式数据)，也`没有实例` (没有 this 上下文)
+一个函数式组件就像这样：
+```js
+Vue.component('my-component', {
+  functional: true,
+  // Props 是可选的
+  props: {
+    // ...
+  },
+  // 为了弥补缺少的实例
+  // 提供第二个参数作为上下文
+  render: function (createElement, context) {
+    // ...
+  }
+})
+```
+单文件组件
+```html
+<template functional>
+  <!-- ... -->
+</template>
+```
+[函数式组件](https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6) 详细介绍：
+
+下面以smart-list组件举例：
+```js
+var EmptyList = { /* ... */ }
+var TableList = { /* ... */ }
+var OrderedList = { /* ... */ }
+var UnorderedList = { /* ... */ }
+
+Vue.component('smart-list', {
+  functional: true,
+  props: {
+    items: {
+      type: Array,
+      required: true
+    },
+    isOrdered: Boolean
+  },
+  render: function (createElement, context) {
+    function appropriateListComponent () {
+      var items = context.props.items
+      if (items.length === 0)           return EmptyList
+      if (typeof items[0] === 'object') return TableList
+      if (context.props.isOrdered)      return OrderedList
+
+      return UnorderedList
+    }
+
+    return createElement(
+      appropriateListComponent(),
+      context.data,
+      context.children
+    )
+  }
+})
+```
+
+## 5. Api 之间的区别
+### 1. watch 和 computed
+**watch**：自定义的侦听器，每当监听的数据变化时都会执行回调进行后续操作；
+
+**computed**：计算属性，其值`有缓存`，除非依赖的响应式属性变化才会重新计算；
+#### 运用场景：
+- 当需要进行数值计算，并且依赖于其它数据时，应该使用 `computed`，利用其缓存特性，避免每次获取值时，都要重新计算
+- 当需要在数据变化时执行异步或开销较大的操作时，应该使用 `watch`。
+
+### 2. components 和 Vue.component
+1. components: 局部注册组件
+```js
+export default{
+  components: {
+    compA,
+    compB,
+    ...
+  }
+}
+```
+2. Vue.component: 注册或获取全局组件
+```js
+// 注册组件，传入一个扩展过的构造器
+Vue.component('my-component', Vue.extend({ /* ... */ }))
+
+// 注册组件，传入一个选项对象 (自动调用 Vue.extend)
+Vue.component('my-component', { /* ... */ })
+
+// 获取注册的组件 (始终返回构造器)
+var MyComponent = Vue.component('my-component')
+```
+
+### 3. v-show 和 v-if
+**v-if**：是动态的向DOM树内添加或删除DOM元素；在切换时元素及它的数据绑定 / 组件被销毁并重建，`更消耗性能`
+
+**v-show**：是基于css属性'display'简单切换
+
+#### 运用场景：
+`v-if` 适合于不需要频繁切换条件的场景；`v-show` 适合于频繁切换。
