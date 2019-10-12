@@ -328,7 +328,8 @@ console.log(this.$parent) // 只能获取 parent 的属性和方法
 // 通过 $emit 触发 update方法更新 title
 this.$emit('update:title', newTitle)
 ```
-## 3. watch
+## 3. 不常用但实用的开发小技巧
+### 1. watch
 [vm.$watch( expOrFn, callback, [options] )](https://cn.vuejs.org/v2/api/#vm-watch) 详细说明
 
 ### options：deep（深度监听） 和 immediate（立即执行）
@@ -354,9 +355,7 @@ vm.$watch(
   }
 )
 ```
-
-## 4. 不常用但实用的开发小技巧
-### 1. v-cloak
+### 2. v-cloak
 场景：网络加载慢，是出现`{{}}`插值来不及渲染的情况，
 
 解决方式：使用`v-cloak`指令
@@ -366,17 +365,18 @@ vm.$watch(
 </div>
 <!-- 不会显示，直到编译结束。 -->
 ```
+css设置
 ```css
 [v-cloak] {
     display: none;
 }
 ```
-### 2. $forceUpdate
+### 3. $forceUpdate
 场景：render函数没有自动更新，
 
 解决方式：强制刷新，解决页面不会重新渲染的问题，`this.$forceUpdate()`
 
-### 3. Object.freeze
+### 4. Object.freeze
 `Object.freeze()`是ES5新增的特性，可以冻结一个对象，防止对象被修改。
 ```js
 new Vue({
@@ -404,7 +404,7 @@ new Vue({
 })
 ```
 
-### 4. template 调试
+### 5. template 调试
 场景: 在Vue开发过程中, 经常会遇到template模板渲染时JavaScript变量出错的问题
 ```js
 // main.js
@@ -414,7 +414,7 @@ Vue.prototype.$log = window.console.log
 <div>{{$log(info)}}</div>
 ```
 
-### 5. transformToRequire 再也不用把图片写成变量了
+### 6. transformToRequire 再也不用把图片写成变量了
 场景：vue-cli3脚手架引入图片，需提前 require 传给一个变量再传给组件
 
 解决方式：配置 `transformToRequire` 获取require地址
@@ -433,7 +433,7 @@ Vue.prototype.$log = window.console.log
   }
 </script>
 ```
-vue.config.js中配置
+`vue.config.js`中配置
 ```js
 {
   vue: {
@@ -451,7 +451,7 @@ vue.config.js中配置
 </template>
 ```
 
-### 6. img 图片加载失败
+### 7. img 图片加载失败
 场景：移动端会出现很多图片的加载，某些图片加载不出来
 
 解决方式：使用默认的图片替换加载失败的图片
@@ -490,7 +490,7 @@ new Vue({
 })
 ```
 
-### 7. 路径别名配置
+### 8. 路径别名配置
 ```js
 // vue.config.js
 resolve: {
@@ -520,13 +520,13 @@ module.exports = {
 }
 ```
 
-### 8. 不同路由的组件复用
+### 9. 不同路由的组件复用
 场景：相同的组件在不同路由下不刷新
 ```html
 <router-view :key="$route.fullpath"></router-view>
 ```
 
-### 9.  require.context() 自动化全局注册
+### 10.  require.context() 自动化全局注册
 webpack官方说明：[require.context()](https://webpack.docschina.org/guides/dependency-management/#require-context)
 ```js
 const requireComponent = require.context(
@@ -590,7 +590,7 @@ export default new Router({
 })
 
 ```
-### 10. 深度作用选择器
+### 11. 深度作用选择器
 [Scoped Css](https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors)
 
 当 `<style>` 标签有 `scoped` 属性时，它的 `CSS` 只作用于当前组件中的元素
@@ -628,7 +628,7 @@ export default new Router({
 .demo[data-v-f3f3eg9] input { /* ... */ }
 ```
 
-### 11. Vue.compile 渲染函数
+### 12. Vue.compile 渲染函数
 在 render 函数中编译模板字符串。**只在独立构建时有效**
 ```js
 var res = Vue.compile('<div><span>{{ msg }}</span></div>')
@@ -679,7 +679,7 @@ Vue.component('', {
 })
 ```
 
-### 12. 异步组件处理
+### 13. 异步组件处理
 #### 常用两种
 ```js
 // 1. 
@@ -715,7 +715,7 @@ const AsyncComponent = () => ({
 })
 ```
 
-### 13. 函数式组件（functional）
+### 14. 函数式组件（functional）
 [functional](https://cn.vuejs.org/v2/api/#functional)
 定义：它`无状态` (没有响应式数据)，也`没有实例` (没有 this 上下文)
 一个函数式组件就像这样：
@@ -776,7 +776,7 @@ Vue.component('smart-list', {
 })
 ```
 
-## 5. Api 之间的区别
+## 4. Api 之间的区别
 ### 1. watch 和 computed
 **watch**：自定义的侦听器，每当监听的数据变化时都会执行回调进行后续操作；
 
