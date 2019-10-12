@@ -41,7 +41,7 @@ Vue 实例有一个完整的生命周期，也就是从开始创建、初始化�
 
 父 beforeDestroy -> 子 beforeDestroy -> 子 destroyed -> 父 destroyed
 
-## 2. 组件之间传值
+## 2. 组件通讯
 ### 1. props（单项数据流）
 1. 字符串数组形式
 ```js
