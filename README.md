@@ -819,4 +819,4 @@ var MyComponent = Vue.component('my-component')
 - `v-show` 适合于频繁切换。
 
 ## 其他文档链接：
-1. [css篇](https://github.com/guixianleng/documents/tree/master/css)
+1. [运用css技巧篇](https://github.com/guixianleng/documents/tree/master/css)
