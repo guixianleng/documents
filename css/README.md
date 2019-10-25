@@ -1,10 +1,12 @@
-## css 相关
+## css技巧篇
+
 ### 1. 鼠标事件失效
 ```css
 .lose-efficacy {
   pointer-events: none;
 }
 ```
+
 ### 2. 文本两端对齐
 ```css
 .justify {
@@ -16,6 +18,7 @@
 }
 
 ```
+
 ### 3. 不换行、自动换行、强制换行
 ```css
 /* 不换行 */
@@ -32,6 +35,7 @@
   word-break: break-all;
 }
 ```
+
 ### 4. 超出部分显示省略号
 ```css
 /* 单行文本 */
@@ -51,6 +55,7 @@
   word-break: break-all;
 }
 ```
+
 ### 5. 禁止用户选择
 ```css
 .forbidden {
@@ -62,12 +67,14 @@
   user-select: none;
 }
 ```
+
 ### 6. 识别标签中的 '\n' 并实现换行
 ```css
 div {
   white-space: pre-line;
 }
 ```
+
 ### 7. 消除transition闪屏
 ```css
 .wrap {
@@ -76,6 +83,7 @@ div {
   -webkit-perspective: 1000;
 }
 ```
+
 ### 8. 使用caret-color改变光标颜色
 ```css
 input{
@@ -90,6 +98,7 @@ input{
   transform: translate3d(0, 0, 0); /* translateZ(0)亦可 */
 }
 ```
+
 ### 10. 使用attr()抓取data-*
 ```html
 <div data-msg="我是谁，我在哪儿" class="tips">提示信息</div>
@@ -101,6 +110,7 @@ input{
   }
 }
 ```
+
 ### 11. 使用pattern、:valid和:invalid校验表单
 ```html
 <input type="text" placeholder="请输入名字(1到10个中文)" pattern="^[\u4e00-\u9fa5]{1,10}$" required>
